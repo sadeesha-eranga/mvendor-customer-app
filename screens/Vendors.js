@@ -1,27 +1,35 @@
 import * as React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import tw from 'tailwind-react-native-classnames';
+import {List} from "@ui-kitten/components";
+import VendorListItem from "../components/VendorListItem";
+import {useEffect, useState} from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function Vendors({ navigation }) {
+export default function Vendors() {
+
+    const [vendors, setVendors] = useState([]);
+
+    const loadVendors = async () => {
+        try {
+            const vendors = await AsyncStorage.getItem('@vendors');
+            setVendors(JSON.parse(vendors));
+        } catch (e) {
+        }
+    }
+
+    useEffect(() => {
+        loadVendors();
+    }, []);
+
+    const renderItem = ({item, index}) => (
+        <VendorListItem vendor={item} index={index} />
+    );
+
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Vendors</Text>
-        </View>
+        <List
+            style={tw`bg-white h-full`}
+            data={vendors}
+            renderItem={renderItem}
+        />
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    separator: {
-        marginVertical: 30,
-        height: 1,
-        width: '80%',
-    },
-});

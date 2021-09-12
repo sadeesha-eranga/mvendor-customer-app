@@ -1,54 +1,51 @@
 import * as React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text} from 'react-native';
 
 import tw from 'tailwind-react-native-classnames';
-import {Icon, Avatar, Button, ListItem, List} from "@ui-kitten/components";
+import {List} from "@ui-kitten/components";
+import VendorListItem from '../components/VendorListItem';
+import {useEffect, useState} from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const InstallButton = (props) => (
-    <Button size='tiny' status={"info"} appearance={"ghost"}>
-        More details
-    </Button>
-);
+export default function Home() {
 
-const ItemImage = (props) => (
-    <Avatar
-        {...props}
-        style={[props.style, { tintColor: null, height: 50, width: 50 }]}
-        source={require('../assets/icon.png')}
-    />
-);
+    const [vendors, setVendors] = useState([]);
 
-export default function Home({navigation}) {
+    const loadVendors = async () => {
+        try {
+            const vendors = await AsyncStorage.getItem('@vendors');
+            setVendors(JSON.parse(vendors));
+        } catch (e) {
+        }
+    }
 
-    const renderItem = ({ item, index }) => (
-        <ListItem
-            style={styles.item}
-            title='UI Kitten'
-            description={<Text style={tw`m-5`}>Hello</Text>}
-            accessoryLeft={ItemImage}
-            accessoryRight={InstallButton}
-        />
+    useEffect(() => {
+        loadVendors();
+    }, []);
+
+    const renderItem = ({item, index}) => (
+        <VendorListItem vendor={item} index={index} />
     );
 
     return (
-        <View style={tw`bg-white h-full`}>
-            <Text style={tw`p-5 text-3xl font-bold tracking-tight`}>My Vendors</Text>
-            <Text style={tw`pl-5 text-xl font-bold`}>Arriving</Text>
-            <List
-                style={tw`bg-white h-full`}
-                data={[{something: 'sasd'}]}
-                renderItem={renderItem}
-            />
-        </View>
+        <>
+            <Text style={tw`p-5 bg-white text-3xl font-bold tracking-tight`}>My Vendors</Text>
+            <View style={tw`bg-white h-2/5 pb-5`}>
+                <Text style={tw`pl-5 text-xl font-bold`}>Arriving</Text>
+                <List
+                    style={tw`bg-white h-full`}
+                    data={vendors}
+                    renderItem={renderItem}
+                />
+            </View>
+            <View style={tw`bg-white h-3/5`}>
+                <Text style={tw`pl-5 text-xl font-bold`}>Recently Joined</Text>
+                <List
+                    style={tw`bg-white h-full`}
+                    data={vendors}
+                    renderItem={renderItem}
+                />
+            </View>
+        </>
     );
 }
-
-const styles = StyleSheet.create({
-    item: {
-        marginVertical: 10,
-        marginHorizontal: 20,
-        borderStyle: "solid",
-        borderColor: '#E6AD00',
-        backgroundColor: 'rgba(253,205,3,0.25)'
-    }
-});
