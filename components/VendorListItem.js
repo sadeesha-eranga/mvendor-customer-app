@@ -1,6 +1,6 @@
 import React from 'react';
-import {StyleSheet, Text} from "react-native";
-import {Avatar, Button, Card, ListItem} from "@ui-kitten/components";
+import {StyleSheet} from "react-native";
+import {Button, Card, ListItem, Avatar} from "@ui-kitten/components";
 
 const MoreDetailsButton = () => (
     <Button size='tiny' status={"info"} appearance={"ghost"}>
@@ -8,14 +8,16 @@ const MoreDetailsButton = () => (
     </Button>
 );
 
-const ItemImage = (props) => (
-    <Avatar
-        style={[props.style, {tintColor: null, height: 50, width: 50}]}
+const ItemImage = (props) => {
+    console.log({props})
+    return (<Avatar
+        shape='rounded'
+        size='large'
         source={{
-            uri: 'https://d3iitm8eqnsqba.cloudfront.net/business/avatar.png'
+            uri: props.vendor.image
         }}
-    />
-);
+    />);
+};
 
 function VendorListItem({vendor}) {
     return (
@@ -24,8 +26,8 @@ function VendorListItem({vendor}) {
                 style={styles.listItem}
                 title={vendor.name}
                 description={vendor.category.name}
-                accessoryLeft={ItemImage}
-                accessoryRight={MoreDetailsButton}
+                accessoryLeft={<ItemImage vendor={vendor} />}
+                accessoryRight={<MoreDetailsButton vendor={vendor} />}
             />
         </Card>
     );

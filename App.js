@@ -9,6 +9,7 @@ export default function App() {
 
     const data = new Array(8).fill({
         name: 'Item',
+        image: 'https://d3iitm8eqnsqba.cloudfront.net/business/avatar.png',
         category: {
             id: 1,
             name: 'Food'
