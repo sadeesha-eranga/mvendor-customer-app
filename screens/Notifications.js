@@ -1,27 +1,37 @@
 import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
+import {useEffect, useState} from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import VendorListItem from "../components/VendorListItem";
+import tw from "tailwind-react-native-classnames";
+import {List} from "@ui-kitten/components";
 
-export default function Notifications({ navigation }) {
+export default function Notifications() {
+
+    const [notifications, setNotifications] = useState([]);
+
+    const loadNotifications = async () => {
+        try {
+            const notifications = await AsyncStorage.getItem('@notifications');
+            setNotifications(JSON.parse(notifications || []));
+        } catch (e) {
+        }
+    }
+
+    useEffect(() => {
+        loadNotifications();
+    }, []);
+
+    const renderItem = ({item, index}) => (
+        <VendorListItem vendor={item} index={index} />
+    );
+
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Notifications</Text>
-        </View>
+        <List
+            style={tw`bg-white h-full`}
+            data={notifications}
+            renderItem={renderItem}
+        />
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    separator: {
-        marginVertical: 30,
-        height: 1,
-        width: '80%',
-    },
-});

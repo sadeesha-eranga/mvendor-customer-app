@@ -1,7 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text} from "react-native";
 import {Avatar, Button, Card, ListItem} from "@ui-kitten/components";
-import tw from "tailwind-react-native-classnames";
 
 const MoreDetailsButton = () => (
     <Button size='tiny' status={"info"} appearance={"ghost"}>
@@ -18,25 +17,31 @@ const ItemImage = (props) => (
     />
 );
 
-function VendorListItem({ vendor }) {
+function VendorListItem({vendor}) {
     return (
-        <ListItem
-            style={styles.item}
-            title={vendor.name}
-            description={vendor.category.name}
-            accessoryLeft={ItemImage}
-            accessoryRight={MoreDetailsButton}
-        />
+        <Card style={styles.card}>
+            <ListItem
+                style={styles.listItem}
+                title={vendor.name}
+                description={vendor.category.name}
+                accessoryLeft={ItemImage}
+                accessoryRight={MoreDetailsButton}
+            />
+        </Card>
     );
 }
 
 const styles = StyleSheet.create({
-    item: {
+    card: {
         marginVertical: 10,
         marginHorizontal: 20,
         borderStyle: "solid",
         borderColor: '#E6AD00',
         backgroundColor: 'rgba(253,205,3,0.25)'
+    },
+    listItem: {
+        margin: -15,
+        backgroundColor: 'transparent',
     }
 });
 

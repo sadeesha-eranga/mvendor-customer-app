@@ -12,7 +12,7 @@ export default function Vendors() {
     const loadVendors = async () => {
         try {
             const vendors = await AsyncStorage.getItem('@vendors');
-            setVendors(JSON.parse(vendors));
+            setVendors(JSON.parse(vendors || []));
         } catch (e) {
         }
     }
