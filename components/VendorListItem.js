@@ -24,7 +24,7 @@ function VendorListItem({vendor, navigation, from}) {
                     title={vendor.name}
                     description={vendor.category.name}
                     accessoryLeft={<ItemImage vendor={vendor}/>}
-                    accessoryRight={<Icon name={"arrow-circle-right"}/>}
+                    accessoryRight={<Icon fill={'#FFC300'} name={"arrow-circle-right"}/>}
                 />
             </TouchableOpacity>
         </Card>
