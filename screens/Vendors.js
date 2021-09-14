@@ -5,7 +5,7 @@ import VendorListItem from "../components/VendorListItem";
 import {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function Vendors() {
+export default function Vendors({ navigation }) {
 
     const [vendors, setVendors] = useState([]);
 
@@ -22,7 +22,7 @@ export default function Vendors() {
     }, []);
 
     const renderItem = ({item, index}) => (
-        <VendorListItem vendor={item} index={index} />
+        <VendorListItem navigation={navigation} vendor={item} index={index} />
     );
 
     return (

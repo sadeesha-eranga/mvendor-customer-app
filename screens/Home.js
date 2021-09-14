@@ -1,14 +1,12 @@
 import * as React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, SafeAreaView} from 'react-native';
 
 import tw from 'tailwind-react-native-classnames';
 import {List} from "@ui-kitten/components";
 import VendorListItem from '../components/VendorListItem';
 import {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-export default function Home() {
-
+export default function Home({navigation}) {
     const [vendors, setVendors] = useState([]);
 
     const loadVendors = async () => {
@@ -24,12 +22,12 @@ export default function Home() {
     }, []);
 
     const renderItem = ({item, index}) => (
-        <VendorListItem vendor={item} index={index} />
+        <VendorListItem navigation={navigation} vendor={item} index={index} />
     );
 
     return (
-        <>
-            <Text style={tw`p-5 bg-white text-3xl font-bold tracking-tight`}>My Vendors</Text>
+        <SafeAreaView>
+            <Text style={tw`p-5 ios:pt-2 android:pt-10 bg-white text-3xl font-bold tracking-tight`}>My Vendors</Text>
             <View style={tw`bg-white h-2/5 pb-5`}>
                 <Text style={tw`pl-5 text-xl font-bold`}>Arriving</Text>
                 <List
@@ -46,6 +44,6 @@ export default function Home() {
                     renderItem={renderItem}
                 />
             </View>
-        </>
+        </SafeAreaView>
     );
 }

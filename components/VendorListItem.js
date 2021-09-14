@@ -1,48 +1,47 @@
 import React from 'react';
 import {StyleSheet} from "react-native";
-import {Button, Card, ListItem, Avatar} from "@ui-kitten/components";
+import {Card, ListItem, Avatar, Icon} from "@ui-kitten/components";
+import {TouchableOpacity} from "react-native-gesture-handler";
 
-const MoreDetailsButton = () => (
-    <Button size='tiny' status={"info"} appearance={"ghost"}>
-        More details
-    </Button>
-);
-
-const ItemImage = (props) => {
-    console.log({props})
+const ItemImage = ({vendor}) => {
     return (<Avatar
         shape='rounded'
         size='large'
         source={{
-            uri: props.vendor.image
+            uri: vendor.image
         }}
     />);
 };
 
-function VendorListItem({vendor}) {
+function VendorListItem({vendor, navigation}) {
+    console.log({vendor})
     return (
         <Card style={styles.card}>
-            <ListItem
-                style={styles.listItem}
-                title={vendor.name}
-                description={vendor.category.name}
-                accessoryLeft={<ItemImage vendor={vendor} />}
-                accessoryRight={<MoreDetailsButton vendor={vendor} />}
-            />
+            <TouchableOpacity onPress={() => {
+                navigation.push('Route', {vendor: vendor});
+            }}>
+                <ListItem
+                    style={styles.listItem}
+                    title={vendor.name}
+                    description={vendor.category.name}
+                    accessoryLeft={<ItemImage vendor={vendor}/>}
+                    accessoryRight={<Icon name={"arrow-circle-right"}/>}
+                />
+            </TouchableOpacity>
         </Card>
     );
 }
 
 const styles = StyleSheet.create({
     card: {
-        marginVertical: 10,
-        marginHorizontal: 20,
+        marginVertical: 5,
+        marginHorizontal: 18,
         borderStyle: "solid",
         borderColor: '#E6AD00',
         backgroundColor: 'rgba(253,205,3,0.25)'
     },
     listItem: {
-        margin: -15,
+        margin: -8,
         backgroundColor: 'transparent',
     }
 });
