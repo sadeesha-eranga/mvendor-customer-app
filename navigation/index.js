@@ -8,6 +8,7 @@ import Account from '../screens/Account';
 import Vendors from "../screens/Vendors";
 import Notifications from "../screens/Notifications";
 import Route from '../screens/Route';
+import VendorDetails from "../screens/VendorDetails";
 
 const Tabs = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -37,6 +38,7 @@ const HomeStackScreen = () => (
 const VendorsStackScreen = () => (
     <VendorsStack.Navigator>
         <VendorsStack.Screen name="Vendors" component={Vendors} />
+        <VendorsStack.Screen name="VendorDetails" component={VendorDetails} />
     </VendorsStack.Navigator>
 );
 

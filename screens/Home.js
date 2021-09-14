@@ -22,7 +22,7 @@ export default function Home({navigation}) {
     }, []);
 
     const renderItem = ({item, index}) => (
-        <VendorListItem navigation={navigation} vendor={item} index={index} />
+        <VendorListItem from={'home'} navigation={navigation} vendor={item} index={index} />
     );
 
     return (

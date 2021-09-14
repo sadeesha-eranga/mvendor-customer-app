@@ -13,12 +13,11 @@ const ItemImage = ({vendor}) => {
     />);
 };
 
-function VendorListItem({vendor, navigation}) {
-    console.log({vendor})
+function VendorListItem({vendor, navigation, from}) {
     return (
         <Card style={styles.card}>
             <TouchableOpacity onPress={() => {
-                navigation.push('Route', {vendor: vendor});
+                navigation.navigate(from === 'home'? 'Route' : 'VendorDetails', {vendor});
             }}>
                 <ListItem
                     style={styles.listItem}
