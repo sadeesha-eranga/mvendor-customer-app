@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {View, Text, SafeAreaView} from 'react-native';
+import {useEffect, useState} from 'react';
+import {SafeAreaView, Text, View} from 'react-native';
 
 import tw from 'tailwind-react-native-classnames';
 import {List} from "@ui-kitten/components";
 import VendorListItem from '../components/VendorListItem';
-import {useEffect, useState} from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 export default function Home({navigation}) {
     const [vendors, setVendors] = useState([]);
 
