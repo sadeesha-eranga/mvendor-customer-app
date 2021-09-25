@@ -11,8 +11,7 @@ export default function Home({navigation}) {
 
     const loadVendors = async () => {
         try {
-            const vendors = await AsyncStorage.getItem('@vendors');
-            setVendors(JSON.parse(vendors));
+
         } catch (e) {
         }
     }

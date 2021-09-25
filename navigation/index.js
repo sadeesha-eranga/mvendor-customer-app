@@ -44,13 +44,13 @@ const VendorsStackScreen = () => (
 
 const NotificationStackScreen = () => (
     <NotificationsStack.Navigator>
-        <VendorsStack.Screen name="Notifications" component={Notifications} />
+        <NotificationsStack.Screen name="Notifications" component={Notifications} />
     </NotificationsStack.Navigator>
 );
 
 const AccountStackScreen = () => (
     <AccountStack.Navigator>
-        <VendorsStack.Screen name="Account" component={Account} />
+        <AccountStack.Screen name="Account" component={Account} />
     </AccountStack.Navigator>
 );
 
