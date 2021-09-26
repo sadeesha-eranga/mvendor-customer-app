@@ -1,23 +1,50 @@
 import * as React from 'react';
-import {Button, Dimensions, ImageBackground, StyleSheet, Text, View} from 'react-native';
-import {Input,} from "@ui-kitten/components";
+import {useContext, useState} from 'react';
+import {Dimensions, ImageBackground, StyleSheet, Text, View} from 'react-native';
+import {Icon, Input,} from "@ui-kitten/components";
 import {TouchableOpacity} from "react-native-gesture-handler";
-import tw from 'tailwind-react-native-classnames';
+import {TouchableWithoutFeedback} from "@ui-kitten/components/devsupport";
+import {AuthContext} from "../navigation/context";
 
-export default function Login({navigation}) {
+export default function SignIn({navigation}) {
 
-    const handleLogin = () => {
-        console.log('login')
+    const [email, setEmail] = useState('msadeeshaeranga@gmail.com');
+    const [password, setPassword] = useState('Sadeesha@123');
+    const [secureTextEntry, setSecureTextEntry] = React.useState(true);
+
+    const {signIn} = useContext(AuthContext);
+
+    const toggleSecureEntry = () => {
+        setSecureTextEntry(!secureTextEntry);
     };
+
+    const renderIcon = (props) => (
+        <TouchableWithoutFeedback onPress={toggleSecureEntry}>
+            <Icon {...props} name={secureTextEntry ? 'eye-off' : 'eye'}/>
+        </TouchableWithoutFeedback>
+    );
 
     return (
         <ImageBackground source={require('../assets/background-1-yellow.png')}
                          style={styles.backgroundImage}>
             <View style={styles.container}>
                 <Text style={styles.title}>Login to Account</Text>
-                <Input style={styles.input} placeholder={'Email'}/>
-                <Input style={styles.input} placeholder={'Password'}/>
-                <TouchableOpacity style={styles.btn} onPress={handleLogin}>
+                <Input autoCapitalize={'none'}
+                       value={'msadeeshaeranga@gmail.com'}
+                       size={'large'}
+                       status={'basic'}
+                       style={styles.input}
+                       placeholder={'Email'}
+                       onChangeText={setEmail}/>
+                <Input size={'large'}
+                       value={'Sadeesha@123'}
+                       status={'basic'}
+                       style={styles.input}
+                       placeholder={'Password'}
+                       onChangeText={setPassword}
+                       accessoryRight={renderIcon}
+                       secureTextEntry={secureTextEntry}/>
+                <TouchableOpacity style={styles.btn} onPress={() => signIn(email, password)}>
                     <Text style={{color: 'white', fontWeight: 'bold'}}>Login</Text>
                 </TouchableOpacity>
                 <View style={styles.flexContainer}>

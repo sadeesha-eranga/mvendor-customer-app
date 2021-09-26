@@ -1,28 +1,37 @@
 import * as React from 'react';
+import {useContext, useEffect, useState} from 'react';
 import tw from 'tailwind-react-native-classnames';
 import {List, Text} from "@ui-kitten/components";
 import VendorListItem from "../components/VendorListItem";
-import {useEffect, useState} from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import http from '../utils/http';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {AuthContext} from "../navigation/context";
 
 export default function Vendors({ navigation }) {
 
     const [vendors, setVendors] = useState([]);
 
+    const {signOut} = useContext(AuthContext);
+
     const fetchVendors = async () => {
         try {
-            const res = await http.get('/api/v1/vendors/nearby/1');
+            const userId = await AsyncStorage.getItem('userId');
+            const res = await http.get('/api/v1/vendors/nearby/' + userId);
             if (res.data.success) {
                 setVendors(res.data.vendors)
             }
         } catch (e) {
-            console.error(e);
+            console.log(e);
+            if (e?.response?.status === 401) {
+                signOut();
+            }
         }
     }
 
     useEffect(() => {
-        fetchVendors().then();
+        navigation.addListener('focus', () => {
+            fetchVendors().then();
+        });
     }, []);
 
     const renderItem = ({item, index}) => (
