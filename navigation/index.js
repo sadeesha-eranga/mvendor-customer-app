@@ -169,12 +169,17 @@ export default () => {
                 dispatch({type: 'SIGN_OUT'})
             },
             signUp: async data => {
-                // In a production app, we need to send user data to server and get a token
-                // We will also need to handle errors if sign up failed
-                // After getting token, we need to persist the token using `SecureStore`
-                // In the example, we'll use a dummy token
-
-                dispatch({type: 'SIGN_IN', token: 'dummy-auth-token'});
+                console.log('signUp')
+                const {access_token, refresh_token, user} = data;
+                await AsyncStorage.setItem('accessToken', access_token);
+                await AsyncStorage.setItem('refreshToken', refresh_token);
+                await AsyncStorage.setItem('userId', user.userId.toString());
+                dispatch({
+                    type: 'SIGN_IN',
+                    accessToken: access_token,
+                    refreshToken: refresh_token,
+                    userId: user.userId
+                });
             },
             refresh: async () => {
                 console.log('refreshing')

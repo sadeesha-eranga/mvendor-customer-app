@@ -2,18 +2,21 @@ import * as React from 'react';
 import {View, Text, SafeAreaView, StyleSheet, Alert} from 'react-native';
 
 import tw from 'tailwind-react-native-classnames';
-import {useEffect, useState} from "react";
+import {useContext, useState} from "react";
 import {Icon, Input} from "@ui-kitten/components";
 import {TouchableWithoutFeedback} from "@ui-kitten/components/devsupport";
 import {TouchableOpacity} from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {createAccount} from '../utils/requests';
+import {AuthContext} from "../navigation/context";
 
 export default function SignUp({navigation}) {
 
     const [values, setValues] = useState({});
     const [secureTextEntry, setSecureTextEntry] = React.useState(true);
     const [errors, setErrors] = useState({});
+
+    const {signUp} = useContext(AuthContext);
 
     const toggleSecureEntry = () => {
         setSecureTextEntry(!secureTextEntry);
@@ -36,7 +39,7 @@ export default function SignUp({navigation}) {
         }
         const location = JSON.parse(await AsyncStorage.getItem('location'));
         if (!location) {
-            Alert.alert('location not setted!');
+            Alert.alert('Please set the location!');
             return;
         }
         try {
@@ -47,9 +50,10 @@ export default function SignUp({navigation}) {
             }
             console.log(data)
             const res = await createAccount(data);
-            console.log(res);
+            signUp(res.data);
         } catch (e) {
             console.log('Create account error', e);
+            Alert.alert('Something went wrong!');
         }
     }
 
@@ -77,18 +81,21 @@ export default function SignUp({navigation}) {
             <View style={tw`m-5`}>
 
                 <Input autoCapitalize={'none'}
+                       autoCorrect={false}
                        size={'large'}
                        status={errors.name ? 'danger' : 'basic'}
                        style={styles.input}
                        placeholder={'Name'}
                        onChangeText={value => handleInputChange('name', value)}/>
                 <Input autoCapitalize={'none'}
+                       autoCorrect={false}
                        size={'large'}
                        status={errors.email ? 'danger' : 'basic'}
                        style={styles.input}
                        placeholder={'Email'}
                        onChangeText={value => handleInputChange('email', value)}/>
                 <Input autoCapitalize={'none'}
+                       autoCorrect={false}
                        size={'large'}
                        status={errors.email ? 'danger' : 'basic'}
                        style={styles.input}
@@ -109,12 +116,14 @@ export default function SignUp({navigation}) {
                        accessoryRight={renderIcon}
                        secureTextEntry={secureTextEntry}/>
                 <Input autoCapitalize={'none'}
+                       autoCorrect={false}
                        size={'large'}
                        status={errors.nicNo ? 'danger' : 'basic'}
                        style={styles.input}
                        placeholder={'NIC No'}
                        onChangeText={value => handleInputChange('nicNo', value)}/>
                 <Input autoCapitalize={'none'}
+                       autoCorrect={false}
                        size={'large'}
                        status={errors.address ? 'danger' : 'basic'}
                        style={styles.input}
