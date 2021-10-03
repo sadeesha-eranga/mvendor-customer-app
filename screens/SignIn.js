@@ -30,14 +30,12 @@ export default function SignIn({navigation}) {
             <View style={styles.container}>
                 <Text style={styles.title}>Login to Account</Text>
                 <Input autoCapitalize={'none'}
-                       value={'msadeeshaeranga@gmail.com'}
                        size={'large'}
                        status={'basic'}
                        style={styles.input}
                        placeholder={'Email'}
                        onChangeText={setEmail}/>
                 <Input size={'large'}
-                       value={'Sadeesha@123'}
                        status={'basic'}
                        style={styles.input}
                        placeholder={'Password'}

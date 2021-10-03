@@ -41,4 +41,13 @@ const createAccount = (data) => {
     });
 }
 
-export {login, refreshTokens, createAccount};
+const updateNotificationToken = (data) => {
+    console.log('updating notification token');
+    return axios.patch(`${SERVER_BASE_URL}/api/v1/public/users/notification`, data, {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+}
+
+export {login, refreshTokens, createAccount, updateNotificationToken};

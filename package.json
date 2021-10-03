@@ -31,7 +31,9 @@
     "react-native-svg": "12.1.1",
     "react-native-web": "~0.13.12",
     "tailwind-react-native-classnames": "^1.4.3",
-    "expo-location": "~12.1.2"
+    "expo-location": "~12.1.2",
+    "expo-notifications": "~0.12.3",
+    "expo-constants": "~11.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"

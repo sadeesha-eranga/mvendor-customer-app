@@ -76,8 +76,7 @@ export default function SignUp({navigation}) {
 
     return (
         <SafeAreaView style={tw`bg-white h-full`}>
-            <Text style={tw`p-5 ios:pt-2 android:pt-10 bg-white text-2xl`}>Create New
-                Account</Text>
+            <Text style={tw`p-5 ios:pt-2 android:pt-10 bg-white text-2xl`}>Create New Account</Text>
             <View style={tw`m-5`}>
 
                 <Input autoCapitalize={'none'}

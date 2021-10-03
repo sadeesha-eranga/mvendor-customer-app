@@ -4,7 +4,6 @@ import {Card, ListItem, Avatar, Icon} from "@ui-kitten/components";
 import {TouchableOpacity} from "react-native-gesture-handler";
 
 const ItemImage = ({vendor}) => {
-    console.log('vendor', vendor);
     return (<Avatar
         shape='rounded'
         size='large'

@@ -165,7 +165,8 @@ export default () => {
                     await AsyncStorage.removeItem('accessToken');
                     await AsyncStorage.removeItem('refreshToken');
                     await AsyncStorage.removeItem('userId');
-                } catch (e) {}
+                } catch (e) {
+                }
                 dispatch({type: 'SIGN_OUT'})
             },
             signUp: async data => {
@@ -203,13 +204,14 @@ export default () => {
     return (
         <AuthContext.Provider value={authContext}>
             <NavigationContainer>
-                {state.isLoading || isFetching ? <Loading/> : state.userId ? <Tabs.Navigator tabBar={props => <BottomTabBar {...props} />}>
-                    <Tabs.Screen name="HomeStack" component={HomeStackScreen} options={{headerShown: false}}/>
-                    <Tabs.Screen name="VendorsStack" component={VendorsStackScreen} options={{headerShown: false}}/>
-                    <Tabs.Screen name="NotificationsStack" component={NotificationStackScreen}
-                                 options={{headerShown: false}}/>
-                    <Tabs.Screen name="AccountStack" component={AccountStackScreen} options={{headerShown: false}}/>
-                </Tabs.Navigator> : <AuthStackScreen/>}
+                {state.isLoading || isFetching ? <Loading/> : state.userId ?
+                    <Tabs.Navigator tabBar={props => <BottomTabBar {...props} />}>
+                        <Tabs.Screen name="HomeStack" component={HomeStackScreen} options={{headerShown: false}}/>
+                        <Tabs.Screen name="VendorsStack" component={VendorsStackScreen} options={{headerShown: false}}/>
+                        <Tabs.Screen name="NotificationsStack" component={NotificationStackScreen}
+                                     options={{headerShown: false}}/>
+                        <Tabs.Screen name="AccountStack" component={AccountStackScreen} options={{headerShown: false}}/>
+                    </Tabs.Navigator> : <AuthStackScreen/>}
             </NavigationContainer>
         </AuthContext.Provider>
     );
