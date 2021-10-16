@@ -22,10 +22,10 @@ function App() {
                     });
                     console.log('res', res.data);
                 } catch (e) {
-                    console.log('Notification token update error', e);
+                    console.log('Notification token update error:', e);
                 }
             }
-        }).catch(e => console.log('Notification registration error', e));
+        }).catch(e => console.log('Notification registration error:', e));
 
         Notifications.addNotificationReceivedListener(notification => {
             console.log('New notification', notification);
@@ -45,8 +45,9 @@ function App() {
 }
 
 async function registerForPushNotificationsAsync() {
-    let token;
-    if (Constants.isDevice) {
+    return new Promise(async (resolve, reject) => {
+        if (!Constants.isDevice) return reject('Not a device');
+        let token;
         const { status: existingStatus } = await Notifications.getPermissionsAsync();
         let finalStatus = existingStatus;
         if (existingStatus !== 'granted') {
@@ -59,18 +60,18 @@ async function registerForPushNotificationsAsync() {
         }
         token = (await Notifications.getExpoPushTokenAsync()).data;
         console.log(token);
-    }
 
-    if (Platform.OS === 'android') {
-        Notifications.setNotificationChannelAsync('default', {
-            name: 'default',
-            importance: Notifications.AndroidImportance.MAX,
-            vibrationPattern: [0, 250, 250, 250],
-            lightColor: '#FF231F7C',
-        }).then();
-    }
+        if (Platform.OS === 'android') {
+            Notifications.setNotificationChannelAsync('default', {
+                name: 'default',
+                importance: Notifications.AndroidImportance.MAX,
+                vibrationPattern: [0, 250, 250, 250],
+                lightColor: '#FF231F7C',
+            }).then();
+        }
 
-    return token;
+        return resolve(token);
+    });
 }
 
 export default App;

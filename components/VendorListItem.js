@@ -17,7 +17,7 @@ function VendorListItem({vendor, navigation, from}) {
     return (
         <Card style={styles.card}>
             <TouchableOpacity onPress={() => {
-                navigation.navigate(from === 'home'? 'Route' : 'VendorDetails', {vendor});
+                navigation.navigate(from === 'arriving' ? 'Route' : 'VendorDetails', {vendor});
             }}>
                 <ListItem
                     style={styles.listItem}

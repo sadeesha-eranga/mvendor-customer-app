@@ -17,6 +17,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {login, refreshTokens} from '../utils/requests';
 import {AuthContext} from './context';
 import Routes from '../screens/Routes';
+import { Alert } from 'react-native';
 
 const Tabs = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -40,6 +41,7 @@ const BottomTabBar = ({navigation, state}) => (
 const HomeStackScreen = () => (
     <HomeStack.Navigator>
         <HomeStack.Screen name="Home" component={Home} options={{headerShown: false}}/>
+        <VendorsStack.Screen name="VendorDetails" component={VendorDetails}/>
         <HomeStack.Screen name="Route" component={Route}/>
     </HomeStack.Navigator>
 );
@@ -151,8 +153,9 @@ export default () => {
                     await AsyncStorage.setItem('accessToken', accessToken);
                     await AsyncStorage.setItem('refreshToken', refreshToken);
                     await AsyncStorage.setItem('userId', user.userId.toString());
+                    await AsyncStorage.setItem('user', JSON.stringify(user));
                 } catch (e) {
-                    console.log(e);
+                    Alert.alert("Authentication failed", "Invalid username or password");
                 }
                 dispatch({
                     type: 'SIGN_IN',

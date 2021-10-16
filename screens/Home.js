@@ -29,11 +29,17 @@ export default function Home({navigation}) {
   }
 
   useEffect(() => {
-    loadVendors().then();
+    navigation.addListener('focus', () => {
+      loadVendors().then();
+    });
   }, []);
 
-  const renderItem = ({item, index}) => (
+  const renderArriving = ({item, index}) => (
     <VendorListItem from={'home'} navigation={navigation} vendor={item} index={index}/>
+  );
+
+  const renderRecent = ({item, index}) => (
+    <VendorListItem from={'recent'} navigation={navigation} vendor={item} index={index}/>
   );
 
   return (
@@ -44,7 +50,7 @@ export default function Home({navigation}) {
         <List
           style={tw`bg-white h-full`}
           data={recentlyJoinedVendors}
-          renderItem={renderItem}
+          renderItem={renderRecent}
         />
       </View>
       <View style={tw`bg-white h-1/2 pb-5`}>
@@ -52,7 +58,7 @@ export default function Home({navigation}) {
         {arrivingVendors.length > 0 ? <List
           style={tw`bg-white h-full`}
           data={arrivingVendors}
-          renderItem={renderItem}
+          renderItem={renderArriving}
         /> : <Text style={tw`pl-5 pt-5`}>No arriving vendors at the moment</Text>}
       </View>
     </SafeAreaView>
