@@ -1,48 +1,60 @@
 import * as React from 'react';
-import {useEffect, useState} from 'react';
-import {SafeAreaView, Text, View} from 'react-native';
-
+import { useEffect, useState } from 'react';
+import { SafeAreaView, Text, View } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
-import {List} from "@ui-kitten/components";
+import { List } from "@ui-kitten/components";
 import VendorListItem from '../components/VendorListItem';
+import http from '../utils/http';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Home({navigation}) {
-    const [vendors, setVendors] = useState([]);
+  const [arrivingVendors, setArrivingVendors] = useState([]);
+  const [recentlyJoinedVendors, setRecentlyJoinedVendors] = useState([]);
 
-    const loadVendors = async () => {
-        try {
-
-        } catch (e) {
-        }
+  const loadVendors = async () => {
+    try {
+      const userId = await AsyncStorage.getItem('userId');
+      console.log(userId);
+      const [resArriving, resRecent] = await Promise.all([
+        http.get('/api/v1/vendors/arriving/' + userId),
+        http.get('/api/v1/vendors/recent/' + userId)
+      ]);
+      const {vendors: arriving} = resArriving.data;
+      const {vendors: recent} = resRecent.data;
+      setArrivingVendors(arriving);
+      setRecentlyJoinedVendors(recent);
+    } catch (e) {
+      console.log(e);
     }
+  }
 
-    useEffect(() => {
-        loadVendors();
-    }, []);
+  useEffect(() => {
+    loadVendors().then();
+  }, []);
 
-    const renderItem = ({item, index}) => (
-        <VendorListItem from={'home'} navigation={navigation} vendor={item} index={index} />
-    );
+  const renderItem = ({item, index}) => (
+    <VendorListItem from={'home'} navigation={navigation} vendor={item} index={index}/>
+  );
 
-    return (
-        <SafeAreaView>
-            <Text style={tw`p-5 ios:pt-2 android:pt-10 bg-white text-3xl font-bold tracking-tight`}>My Vendors</Text>
-            <View style={tw`bg-white h-2/5 pb-5`}>
-                <Text style={tw`pl-5 text-xl font-bold`}>Arriving</Text>
-                <List
-                    style={tw`bg-white h-full`}
-                    data={vendors}
-                    renderItem={renderItem}
-                />
-            </View>
-            <View style={tw`bg-white h-3/5`}>
-                <Text style={tw`pl-5 text-xl font-bold`}>Recently Joined</Text>
-                <List
-                    style={tw`bg-white h-full`}
-                    data={vendors}
-                    renderItem={renderItem}
-                />
-            </View>
-        </SafeAreaView>
-    );
+  return (
+    <SafeAreaView>
+      <Text style={tw`p-5 ios:pt-2 android:pt-10 bg-white text-3xl font-bold tracking-tight`}>My Vendors</Text>
+      <View style={tw`bg-white h-1/2`}>
+        <Text style={tw`pl-5 text-xl font-bold`}>Recently Joined</Text>
+        <List
+          style={tw`bg-white h-full`}
+          data={recentlyJoinedVendors}
+          renderItem={renderItem}
+        />
+      </View>
+      <View style={tw`bg-white h-1/2 pb-5`}>
+        <Text style={tw`pl-5 text-xl font-bold`}>Arriving</Text>
+        {arrivingVendors.length > 0 ? <List
+          style={tw`bg-white h-full`}
+          data={arrivingVendors}
+          renderItem={renderItem}
+        /> : <Text style={tw`pl-5 pt-5`}>No arriving vendors at the moment</Text>}
+      </View>
+    </SafeAreaView>
+  );
 }

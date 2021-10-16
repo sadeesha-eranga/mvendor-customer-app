@@ -16,6 +16,7 @@ import SetLocation from "../screens/SetLocation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {login, refreshTokens} from '../utils/requests';
 import {AuthContext} from './context';
+import Routes from '../screens/Routes';
 
 const Tabs = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -47,6 +48,7 @@ const VendorsStackScreen = () => (
     <VendorsStack.Navigator>
         <VendorsStack.Screen name="Vendors" component={Vendors}/>
         <VendorsStack.Screen name="VendorDetails" component={VendorDetails}/>
+        <VendorsStack.Screen name="Routes" component={Routes}/>
     </VendorsStack.Navigator>
 );
 

@@ -6,6 +6,7 @@ import VendorListItem from "../components/VendorListItem";
 import http from '../utils/http';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {AuthContext} from "../navigation/context";
+import { View } from 'react-native';
 
 export default function Vendors({ navigation }) {
 
@@ -17,6 +18,7 @@ export default function Vendors({ navigation }) {
         try {
             const userId = await AsyncStorage.getItem('userId');
             const res = await http.get('/api/v1/vendors/nearby/' + userId);
+            console.log(res.data);
             if (res.data.success) {
                 setVendors(res.data.vendors)
             }
@@ -43,6 +45,6 @@ export default function Vendors({ navigation }) {
             style={tw`bg-white h-full`}
             data={vendors}
             renderItem={renderItem}
-        /> : <Text>No vendors found!</Text>}
+        /> : <View style={tw`items-center bg-white h-full pt-20`}><Text>No vendors found</Text></View>}
     </>);
 }
