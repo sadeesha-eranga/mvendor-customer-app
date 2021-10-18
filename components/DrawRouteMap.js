@@ -38,7 +38,7 @@ function DrawRouteMap(props) {
                 strokeWidth={4}
                 strokeColor="#E6AD00"
                 optimizeWaypoints={false}
-                mode={'WALKING'}
+                mode={'DRIVING'}
                 onReady={result => {
                     console.log(`Distance: ${result.distance} km`);
 

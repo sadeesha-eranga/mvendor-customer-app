@@ -14,7 +14,6 @@ export default function Home({navigation}) {
   const loadVendors = async () => {
     try {
       const userId = await AsyncStorage.getItem('userId');
-      console.log(userId);
       const [resArriving, resRecent] = await Promise.all([
         http.get('/api/v1/vendors/arriving/' + userId),
         http.get('/api/v1/vendors/recent/' + userId)
@@ -35,7 +34,7 @@ export default function Home({navigation}) {
   }, []);
 
   const renderArriving = ({item, index}) => (
-    <VendorListItem from={'home'} navigation={navigation} vendor={item} index={index}/>
+    <VendorListItem from={'arriving'} navigation={navigation} vendor={item} index={index}/>
   );
 
   const renderRecent = ({item, index}) => (

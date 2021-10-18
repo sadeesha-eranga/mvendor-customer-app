@@ -1,62 +1,82 @@
-import React, {useEffect, useState} from 'react';
-import MapView from "react-native-maps";
+import React, { useContext, useEffect, useState } from 'react';
+import MapView, { Marker } from "react-native-maps";
 import tw from "tailwind-react-native-classnames";
-import {GOOGLE_MAPS_APIKEY} from "@env";
+import { GOOGLE_MAPS_APIKEY } from "@env";
 import MapViewDirections from "react-native-maps-directions";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { RouteContext } from '../navigation/context';
 
 function Map(props) {
-    const [cords, setCords] = useState([]);
-    const [startLatLon, setStartLatLon] = useState({latitude: 0, longitude: 0});
-    const [endLatLon, setEndLatLon] = useState({latitude: 0, longitude: 0});
-    const [mapRef, setMapRef] = useState(null);
+  const [startLatLon, setStartLatLon] = useState(null);
+  const [endLatLon, setEndLatLon] = useState(null);
+  const [mapRef, setMapRef] = useState(null);
 
-    useEffect(() => {
-        const vendor = props?.route?.params?.vendor;
-        setCords(vendor?.locationPoints || []);
-        setStartLatLon({latitude: vendor?.startLatitude, longitude: vendor?.startLongitude});
-        setEndLatLon({latitude: vendor?.endLatitude, longitude: vendor?.endLongitude});
-    }, []);
+  const {setRouteDistance, setRouteDuration} = useContext(RouteContext);
 
-    return (
-        <MapView
-            style={tw`flex-1`}
-            ref={(ref) => {
-                setMapRef(ref);
-            }}
-            onLayout={() => mapRef.fitToCoordinates(cords, {
-                edgePadding: {top: 10, right: 10, bottom: 10, left: 10},
-                animated: true
-            })}
-        >
-            {cords.length > 2 && <MapViewDirections
-                lineDashPattern={[1]}
-                origin={startLatLon}
-                destination={endLatLon}
-                waypoints={(cords.length > 2) ? cords : null}
-                apikey={GOOGLE_MAPS_APIKEY}
-                strokeWidth={4}
-                strokeColor="#E6AD00"
-                optimizeWaypoints={false}
-                mode={'WALKING'}
-                onStart={(params) => {
-                    console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
-                }}
-                onReady={result => {
-                    console.log(`Distance: ${result.distance} km`)
-                    console.log(`Duration: ${result.duration} min.`)
+  useEffect(() => {
+    const vendor = props.vendor;
+    setStartLatLon({latitude: vendor?.currentLatitude, longitude: vendor?.currentLongitude});
+    AsyncStorage.getItem('user').then((user) => {
+      const {userDetails: {latitude, longitude}} = JSON.parse(user);
+      setEndLatLon({latitude, longitude});
+    });
+  }, [props.vendor]);
 
-                    mapRef.fitToCoordinates(result.coordinates, {
-                        edgePadding: {top: 10, right: 10, bottom: 10, left: 10},
-                        animated: true
-                    });
-                }}
-                onError={(errorMessage) => {
-                    console.log('GOT AN ERROR', errorMessage);
-                }}
-            />}
+  useEffect(() => {
+    if (!startLatLon || !endLatLon) return;
+    mapRef.fitToSuppliedMarkers(["origin", 'destination'], {
+      edgePadding: {top: 50, right: 50, bottom: 50, left: 50},
+    });
+  }, [startLatLon, endLatLon]);
 
-        </MapView>
-    );
+  return (
+    <MapView
+      style={tw`flex-1`}
+      ref={(ref) => {
+        setMapRef(ref);
+      }}
+    >
+      {(mapRef && startLatLon && endLatLon) && <MapViewDirections
+        lineDashPattern={[1]}
+        origin={startLatLon}
+        destination={endLatLon}
+        waypoints={[startLatLon, endLatLon]}
+        apikey={GOOGLE_MAPS_APIKEY}
+        strokeWidth={4}
+        strokeColor="#E6AD00"
+        optimizeWaypoints={true}
+        mode={'DRIVING'}
+        onStart={(params) => {
+          console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
+        }}
+        onReady={result => {
+          console.log(`Distance: ${result.distance} km`)
+          console.log(`Duration: ${result.duration} min.`)
+          setRouteDistance(result.distance);
+          setRouteDuration(result.duration);
+        }}
+        onError={(errorMessage) => {
+          console.log('GOT AN ERROR', errorMessage);
+        }}
+      />}
+      {endLatLon && (<Marker
+        coordinate={{
+          latitude: endLatLon.latitude,
+          longitude: endLatLon.longitude
+        }}
+        title={'Vendor Location'}
+        identifier={'origin'}
+      />)}
+      {startLatLon && (<Marker
+        coordinate={{
+          latitude: startLatLon.latitude,
+          longitude: startLatLon.longitude
+        }}
+        title={'My Location'}
+        identifier={'destination'}
+      />)}
+    </MapView>
+  );
 }
 
 export default Map;

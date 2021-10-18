@@ -41,15 +41,16 @@ const BottomTabBar = ({navigation, state}) => (
 const HomeStackScreen = () => (
     <HomeStack.Navigator>
         <HomeStack.Screen name="Home" component={Home} options={{headerShown: false}}/>
-        <VendorsStack.Screen name="VendorDetails" component={VendorDetails}/>
+        <VendorsStack.Screen name="VendorDetails" component={VendorDetails} options={{title: 'Vendor Details'}}/>
         <HomeStack.Screen name="Route" component={Route}/>
+        <VendorsStack.Screen name="Routes" component={Routes}/>
     </HomeStack.Navigator>
 );
 
 const VendorsStackScreen = () => (
     <VendorsStack.Navigator>
         <VendorsStack.Screen name="Vendors" component={Vendors}/>
-        <VendorsStack.Screen name="VendorDetails" component={VendorDetails}/>
+        <VendorsStack.Screen name="VendorDetails" component={VendorDetails} options={{title: 'Vendor Details'}}/>
         <VendorsStack.Screen name="Routes" component={Routes}/>
     </VendorsStack.Navigator>
 );
@@ -70,7 +71,7 @@ const AuthStackScreen = () => (
     <AuthStack.Navigator>
         <AuthStack.Screen name="Login" component={SignIn} options={{headerShown: false}}/>
         <AuthStack.Screen name="SignUp" component={SignUp}/>
-        <AccountStack.Screen name="SetLocation" component={SetLocation}/>
+        <AccountStack.Screen name="SetLocation" component={SetLocation} options={{title: 'Set Location'}}/>
     </AuthStack.Navigator>
 );
 
