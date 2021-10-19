@@ -37,8 +37,8 @@ export default function Route(props) {
             <Text style={tw`text-xl ml-5 font-bold mt-5`}>{vendor.name}</Text>
             <Layout style={styles.schedulesContainer} level='1'>
               <View>
-                <Text style={tw`ml-5 font-bold`}>{distance} Kilometer{distance > 1 ? 's' : ''} away</Text>
-                <Text style={tw`ml-5 font-bold mt-2`}>Arrive in {parseInt(duration)} minutes</Text>
+                <Text style={tw`ml-5 font-bold`}>{distance} away</Text>
+                <Text style={tw`ml-5 font-bold mt-2`}>Arrive in {duration}</Text>
                 <Text style={tw`ml-5 mt-2`}>{vendor.description}</Text>
               </View>
               <Avatar style={tw`mr-2`} shape={'round'} size='giant' source={{uri: vendor.profileImage}}/>
