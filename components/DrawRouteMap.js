@@ -1,14 +1,25 @@
 import React, {useEffect, useState} from 'react';
-import MapView from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import tw from "tailwind-react-native-classnames";
 import {GOOGLE_MAPS_APIKEY} from "@env";
 import MapViewDirections from "react-native-maps-directions";
+import { Image } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function DrawRouteMap(props) {
     const [coords, setCoords] = useState([]);
     const [startLatLon, setStartLatLon] = useState({latitude: 0, longitude: 0});
     const [endLatLon, setEndLatLon] = useState({latitude: 0, longitude: 0});
     const [mapRef, setMapRef] = useState(null);
+    const [homeLocation, setHomeLocation] = useState(null);
+
+    useEffect(() => {
+        (async () => {
+            const user = await AsyncStorage.getItem('user');
+            const {userDetails: {latitude, longitude}} = JSON.parse(user);
+            setHomeLocation({latitude, longitude});
+        })();
+    }, []);
 
     useEffect(() => {
         const route = props.item;
@@ -51,7 +62,15 @@ function DrawRouteMap(props) {
                     console.log('GOT AN ERROR', errorMessage);
                 }}
             />}
-
+            {homeLocation && <Marker
+              coordinate={{
+                  latitude: homeLocation.latitude,
+                  longitude: homeLocation.longitude
+              }}
+              title={'Home'}
+            >
+                <Image source={require('../assets/home.png')} style={{height: 35, width: 35}}/>
+            </Marker>}
         </MapView>
     );
 }
