@@ -1,77 +1,121 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as eva from '@eva-design/eva';
-import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
-import {EvaIconsPack} from '@ui-kitten/eva-icons';
+import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import AppNavigator from './navigation';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
-import {Platform} from "react-native";
-import {updateNotificationToken} from './utils/requests';
+import { Alert, Platform } from "react-native";
+import { updateNotificationToken } from './utils/requests';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function App() {
-    useEffect(() => {
-        registerForPushNotificationsAsync().then(async token => {
-            if (token) {
-                try {
-                    const userId = await AsyncStorage.getItem('userId');
-                    const res = await updateNotificationToken({
-                        userId,
-                        token,
-                        userType: 'CUSTOMER'
-                    });
-                    console.log('res', res.data);
-                } catch (e) {
-                    console.log('Notification token update error:', e);
-                }
+
+  const notificationListener = useRef();
+  const responseListener = useRef();
+  const lastNotificationResponse = Notifications.useLastNotificationResponse();
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then(async token => {
+      if (token) {
+        try {
+          const userId = await AsyncStorage.getItem('userId');
+          const res = await updateNotificationToken({
+            userId,
+            token,
+            userType: 'CUSTOMER'
+          });
+          console.log('res', res.data);
+        } catch (e) {
+          console.log('Notification token update error:', e);
+        }
+      }
+    }).catch(e => console.log('Notification registration error:', e));
+
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false
+      })
+    });
+
+    Notifications.addNotificationReceivedListener(notification => {
+      console.log('New notification', notification);
+    });
+
+    Notifications.addNotificationResponseReceivedListener(response => {
+      console.log('response', response);
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (lastNotificationResponse && lastNotificationResponse.notification.request.content.data) {
+      const data = lastNotificationResponse.notification.request.content.data;
+      console.log('notification data', data);
+      Alert.alert(
+        "Are you sure",
+        "Do you want to get notified?",
+        [
+          {
+            text: "No",
+            onPress: () => console.log("No Pressed"),
+            style: "cancel"
+          },
+          {
+            text: "Yes", onPress: () => {
+              console.log("Yes Pressed");
             }
-        }).catch(e => console.log('Notification registration error:', e));
+          }
+        ],
+        {cancelable: false}
+      );
+    } else {
+      console.log('no notification data');
+    }
+  }, [lastNotificationResponse])
 
-        Notifications.addNotificationReceivedListener(notification => {
-            console.log('New notification', notification);
-        });
-
-        Notifications.addNotificationResponseReceivedListener(response => {
-            console.log('response', response);
-        });
-    }, []);
-
-    return (<>
-      <IconRegistry icons={EvaIconsPack}/>
-      <ApplicationProvider {...eva} theme={eva.light}>
-        <AppNavigator/>
-      </ApplicationProvider>
-    </>);
+  return (<>
+    <IconRegistry icons={EvaIconsPack}/>
+    <ApplicationProvider {...eva} theme={eva.light}>
+      <AppNavigator/>
+    </ApplicationProvider>
+  </>);
 }
 
 async function registerForPushNotificationsAsync() {
-    return new Promise(async (resolve, reject) => {
-        if (!Constants.isDevice) return reject('Not a device');
-        let token;
-        const { status: existingStatus } = await Notifications.getPermissionsAsync();
-        let finalStatus = existingStatus;
-        if (existingStatus !== 'granted') {
-            const { status } = await Notifications.requestPermissionsAsync();
-            finalStatus = status;
-        }
-        if (finalStatus !== 'granted') {
-            alert('Failed to get push token for push notification!');
-            return;
-        }
-        token = (await Notifications.getExpoPushTokenAsync()).data;
-        console.log(token);
+  return new Promise(async (resolve, reject) => {
+    if (!Constants.isDevice) return reject('Not a device');
+    let token;
+    const {status: existingStatus} = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const {status} = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log(token);
 
-        if (Platform.OS === 'android') {
-            Notifications.setNotificationChannelAsync('default', {
-                name: 'default',
-                importance: Notifications.AndroidImportance.MAX,
-                vibrationPattern: [0, 250, 250, 250],
-                lightColor: '#FF231F7C',
-            }).then();
-        }
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      }).then();
+    }
 
-        return resolve(token);
-    });
+    return resolve(token);
+  });
 }
 
 export default App;

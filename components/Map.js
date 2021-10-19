@@ -35,6 +35,9 @@ function Map(props) {
       ref={(ref) => {
         setMapRef(ref);
       }}
+      onLayout={() => mapRef.fitToSuppliedMarkers(["origin", 'destination'], {
+        edgePadding: {top: 50, right: 50, bottom: 50, left: 50},
+      })}
     >
       {(mapRef && startLatLon && endLatLon) && <MapViewDirections
         lineDashPattern={[1]}
