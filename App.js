@@ -8,6 +8,7 @@ import Constants from 'expo-constants';
 import { Alert, Platform } from "react-native";
 import { updateNotificationToken } from './utils/requests';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import http from './utils/http';
 
 function App() {
 
@@ -58,23 +59,31 @@ function App() {
     if (lastNotificationResponse && lastNotificationResponse.notification.request.content.data) {
       const data = lastNotificationResponse.notification.request.content.data;
       console.log('notification data', data);
-      Alert.alert(
-        "Are you sure",
-        "Do you want to get notified?",
-        [
-          {
-            text: "No",
-            onPress: () => console.log("No Pressed"),
-            style: "cancel"
-          },
-          {
-            text: "Yes", onPress: () => {
-              console.log("Yes Pressed");
+      if (data.type === 'START') {
+        Alert.alert(
+          "Notify vendor?",
+          "Tap yes to let the vendor know you are waiting.",
+          [
+            {
+              text: "No",
+              onPress: () => console.log("No Pressed"),
+              style: "cancel"
+            },
+            {
+              text: "Yes", onPress: async () => {
+                console.log("Yes Pressed");
+                try {
+                  const {data: resData} = await http.patch('/api/v1/schedules/customers/' + data.scheduleId)
+                  console.log(resData);
+                } catch (e) {
+                  console.log(e);
+                }
+              }
             }
-          }
-        ],
-        {cancelable: false}
-      );
+          ],
+          {cancelable: false}
+        );
+      }
     } else {
       console.log('no notification data');
     }

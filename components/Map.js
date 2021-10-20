@@ -70,6 +70,7 @@ function Map(props) {
     if (!startLatLon || !endLatLon) return;
     mapRef.fitToSuppliedMarkers(["origin", 'destination'], {
       edgePadding: {top: 50, right: 50, bottom: 50, left: 50},
+      animated: false
     });
 
     updateDuration().then();
@@ -83,6 +84,7 @@ function Map(props) {
       }}
       onLayout={() => mapRef.fitToSuppliedMarkers(["origin", 'destination'], {
         edgePadding: {top: 50, right: 50, bottom: 50, left: 50},
+        animated: false
       })}
     >
       {startLatLon && (<Marker
