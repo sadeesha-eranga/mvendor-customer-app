@@ -5,25 +5,33 @@ import VendorListItem from "../components/VendorListItem";
 import tw from "tailwind-react-native-classnames";
 import { List, Text } from "@ui-kitten/components";
 import { View } from 'react-native';
+import http from '../utils/http';
+import NotificationListItem from '../components/NotificationListItem';
 
-export default function Notifications() {
+export default function Notifications(props) {
 
   const [notifications, setNotifications] = useState([]);
 
   const loadNotifications = async () => {
     try {
-      const notifications = await AsyncStorage.getItem('@notifications');
-      setNotifications(JSON.parse(notifications || []));
+      const userId = await AsyncStorage.getItem('userId');
+      const {data} = await http.get('/api/v1/notifications/customers/' + userId);
+      if (data.success) {
+        setNotifications(data.notifications);
+      }
     } catch (e) {
+      console.log(e);
     }
   }
 
   useEffect(() => {
-    loadNotifications().then();
+    props.navigation.addListener('focus', () => {
+      loadNotifications().then();
+    });
   }, []);
 
   const renderItem = ({item, index}) => (
-    <VendorListItem vendor={item} index={index}/>
+    <NotificationListItem item={item} navigation={props.navigation} index={index}/>
   );
 
   return (
