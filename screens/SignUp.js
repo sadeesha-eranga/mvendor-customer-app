@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Text, SafeAreaView, StyleSheet, Alert} from 'react-native';
+import { View, Text, KeyboardAvoidingView, StyleSheet, Alert, ScrollView, Platform } from 'react-native';
 
 import tw from 'tailwind-react-native-classnames';
 import {useContext, useState} from "react";
@@ -75,7 +75,12 @@ export default function SignUp({navigation}) {
     }
 
     return (
-        <SafeAreaView style={tw`bg-white h-full`}>
+      <KeyboardAvoidingView
+        style={[tw`bg-white`, {flex: 1}]}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? -30 : 0}
+      >
+            <ScrollView>
             <Text style={tw`p-5 ios:pt-2 android:pt-10 bg-white text-2xl`}>Create New Account</Text>
             <View style={tw`m-5`}>
 
@@ -138,7 +143,8 @@ export default function SignUp({navigation}) {
                     <Text style={{color: 'white', fontWeight: 'bold'}}>Create Account</Text>
                 </TouchableOpacity>
             </View>
-        </SafeAreaView>
+            </ScrollView>
+      </KeyboardAvoidingView>
     );
 }
 
