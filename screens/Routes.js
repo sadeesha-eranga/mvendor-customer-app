@@ -30,6 +30,7 @@ export default function Routes(props) {
           setDisableNextButton(true);
           setDisablePrevButton(true);
         }
+        setDisablePrevButton(true);
       } else {
         console.log('Something went wrong');
       }
