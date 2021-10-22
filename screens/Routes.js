@@ -11,6 +11,8 @@ export default function Routes(props) {
 
   const [routes, setRoutes] = useState([]);
   const [selectedRoute, setSelectedRoute] = useState(null);
+  const [disableNextButton, setDisableNextButton] = useState(false);
+  const [disablePrevButton, setDisablePrevButton] = useState(false);
 
   const getRoutes = async () => {
     try {
@@ -22,6 +24,11 @@ export default function Routes(props) {
         setRoutes(_routes);
         if (_routes.length > 0) {
           setSelectedRoute(_routes[0]);
+        }
+
+        if (_routes.length < 2) {
+          setDisableNextButton(true);
+          setDisablePrevButton(true);
         }
       } else {
         console.log('Something went wrong');
@@ -40,6 +47,20 @@ export default function Routes(props) {
       if (selectedRoute.index > 0) {
         setSelectedRoute(routes[selectedRoute.index - 1]);
       }
+    }
+
+    if (selectedRoute.index === routes.length - 2) {
+      setDisableNextButton(true);
+      setDisablePrevButton(false);
+    } else {
+      setDisableNextButton(false);
+    }
+
+    if (selectedRoute.index === 1) {
+      setDisablePrevButton(true);
+      setDisableNextButton(false);
+    } else {
+      setDisablePrevButton(false);
     }
   };
 
@@ -89,11 +110,11 @@ export default function Routes(props) {
       </View>
       <View style={tw`h-2/6 bg-white`}>
         <Layout style={styles.container} level='1'>
-          <Button style={[styles.button]} status={'warning'} appearance='outline'
+          <Button disabled={disablePrevButton} style={[styles.button]} status={'warning'} appearance='outline'
                   onPress={() => changeSelectedRoute('left')}
                   accessoryLeft={<Icon {...props} name='arrow-circle-left'/>}/>
           <Text style={[tw`pt-4 font-bold text-lg`]}>{selectedRoute.name}</Text>
-          <Button style={styles.button} status={'warning'} appearance='outline'
+          <Button disabled={disableNextButton} style={styles.button} status={'warning'} appearance='outline'
                   onPress={() => changeSelectedRoute('right')}
                   accessoryLeft={<Icon {...props} name='arrow-circle-right'/>}/>
         </Layout>
