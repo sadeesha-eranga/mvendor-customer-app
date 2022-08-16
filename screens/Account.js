@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { useContext, useEffect, useState } from 'react';
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
-import {TouchableOpacity} from "react-native-gesture-handler";
-import {AuthContext} from "../navigation/context";
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { AuthContext } from "../navigation/context";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 
 export default function Account() {
 

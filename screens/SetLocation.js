@@ -1,10 +1,10 @@
 import * as React from 'react';
 import tw from "tailwind-react-native-classnames";
-import {Text} from "@ui-kitten/components";
-import {StyleSheet, View} from "react-native";
-import {TouchableOpacity} from "react-native-gesture-handler";
+import { Text } from "@ui-kitten/components";
+import { StyleSheet, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import MapView from "react-native-maps";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import * as Location from 'expo-location';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 

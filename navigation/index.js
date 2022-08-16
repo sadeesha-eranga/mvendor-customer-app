@@ -1,8 +1,8 @@
 import React, {useEffect, useReducer, useState} from 'react';
-import {BottomNavigation, BottomNavigationTab, Icon} from "@ui-kitten/components";
-import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import {createStackNavigator} from "@react-navigation/stack";
-import {NavigationContainer} from '@react-navigation/native';
+import { BottomNavigation, BottomNavigationTab, Icon } from "@ui-kitten/components";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from '@react-navigation/native';
 import Home from '../screens/Home';
 import Account from '../screens/Account';
 import Vendors from "../screens/Vendors";
@@ -14,8 +14,8 @@ import SignIn from "../screens/SignIn";
 import Loading from "../screens/Loading";
 import SetLocation from "../screens/SetLocation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {login, refreshTokens} from '../utils/requests';
-import {AuthContext} from './context';
+import { login, refreshTokens } from '../utils/requests';
+import { AuthContext } from './context';
 import Routes from '../screens/Routes';
 import { Alert } from 'react-native';
 

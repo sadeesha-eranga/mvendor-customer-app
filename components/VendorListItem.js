@@ -1,7 +1,7 @@
 import React from 'react';
-import {StyleSheet} from "react-native";
-import {Card, ListItem, Avatar, Icon} from "@ui-kitten/components";
-import {TouchableOpacity} from "react-native-gesture-handler";
+import { StyleSheet } from "react-native";
+import { Card, ListItem, Avatar, Icon } from "@ui-kitten/components";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const ItemImage = ({vendor}) => {
     return (<Avatar
