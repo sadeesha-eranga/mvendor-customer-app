@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {useContext, useState} from 'react';
+import { useContext, useState } from 'react';
 import { Alert, Dimensions, ImageBackground, StyleSheet, Text, View } from 'react-native';
-import {Icon, Input,} from "@ui-kitten/components";
-import {TouchableOpacity} from "react-native-gesture-handler";
-import {TouchableWithoutFeedback} from "@ui-kitten/components/devsupport";
-import {AuthContext} from "../navigation/context";
+import { Icon, Input } from "@ui-kitten/components";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableWithoutFeedback } from "@ui-kitten/components/devsupport";
+import { AuthContext } from "../navigation/context";
 
 export default function SignIn({navigation}) {
 

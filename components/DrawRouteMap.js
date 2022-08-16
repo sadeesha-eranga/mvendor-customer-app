@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import MapView, { Marker } from "react-native-maps";
 import tw from "tailwind-react-native-classnames";
-import {GOOGLE_MAPS_APIKEY} from "@env";
+import { GOOGLE_MAPS_APIKEY } from "@env";
 import MapViewDirections from "react-native-maps-directions";
 import { Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';

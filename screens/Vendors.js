@@ -1,18 +1,18 @@
 import * as React from 'react';
-import {useContext, useEffect, useState} from 'react';
+import { useContext, useEffect, useState } from 'react';
 import tw from 'tailwind-react-native-classnames';
-import {List, Text} from "@ui-kitten/components";
+import { List, Text } from "@ui-kitten/components";
 import VendorListItem from "../components/VendorListItem";
 import http from '../utils/http';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {AuthContext} from "../navigation/context";
+import { AuthContext } from "../navigation/context";
 import { View } from 'react-native';
 
 export default function Vendors({ navigation }) {
 
     const [vendors, setVendors] = useState([]);
 
-    const {signOut} = useContext(AuthContext);
+    const { signOut } = useContext(AuthContext);
 
     const fetchVendors = async () => {
         try {
