@@ -1,6 +1,6 @@
 import React from 'react';
-import {StyleSheet} from "react-native";
-import {Card, ListItem, Avatar, Icon} from "@ui-kitten/components";
+import { StyleSheet } from "react-native";
+import { Card, ListItem, Avatar, Icon } from "@ui-kitten/components";
 
 const ItemImage = () => {
   return (<Avatar
@@ -10,7 +10,7 @@ const ItemImage = () => {
   />);
 };
 
-function NotificationListItem({item, navigation}) {
+function NotificationListItem({ item }) {
 
   return (
     <Card style={styles.card}>
